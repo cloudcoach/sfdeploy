@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<project name="cloudcoach.sfdc.builder" default="deploy" xmlns:sf="antlib:com.salesforce">
+
+
+ <!--
+ * Copyright (c) 2012, FinancialForce.com, inc
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted provided that the following conditions are met:
+ *
+ * - Redistributions of source code must retain the above copyright notice,
+ * this list of conditions and the following disclaimer.
+ * - Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ * - Neither the name of the FinancialForce.com, inc nor the names of its contributors
+ * may be used to endorse or promote products derived from this software without
+ * specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL
+ * THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+ * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+-->
+
+
+<!-- All classpaths have been copied into the $JENKINS_HOME/tools/ant/lib folder -->
+
+<!-- This is the Salesforce Ant Tasks for deployments -->
+<taskdef uri="antlib:com.salesforce" resource="com/salesforce/antlib.xml" classpath="./build/lib/ant-salesforce.jar" />
+<!-- Ant contrib is used only for the foreach loop functionality -->
+<taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="./build/lib/ant-contrib-1.0b3.jar;./lib/ant-contrib/*" />
+<!-- The xmltask library is used for cleaning the org before a total undeployment -->
+<taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask" classpath="./build/lib/xmltask.jar" />
+<!-- FinancialForceTools.jar is what contains the deploypurge task -->
+<taskdef name="deploypurge" classname="com.salesforce.ant.SFDCDeployPurge" classpath="./build/lib/FinancialForceTools.jar;./build/lib/ant-salesforce.jar"  />
+
+<property file="build.properties" />
+<property environment="env" />
+
+<import file="./build/scripts/undeploy.xml"/>
+<import file="./build/scripts/deploy.xml"/>
+<import file="./build/scripts/exec_anon.xml"/>
+<import file="./build/scripts/run_tests.xml"/>
+<!--<import file="./scripts/apexdoc.xml"/>-->
+
+</project>

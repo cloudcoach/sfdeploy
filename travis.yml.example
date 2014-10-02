@@ -1,0 +1,12 @@
+language: java
+branches:
+  only:
+    - master
+    - staging
+    - dev
+script: 
+- git clone https://github.com/cloudcoach/sfdeploy.git build
+- cp build/build.xml .
+- cp build/build.sh .
+- chmod a+x build.sh
+- ./build.sh

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="apexdoc" name="apexdoc" xmlns:sf="antlib:com.salesforce">
+
+<target name="apexdoc">
+
+		<script language="javascript"><![CDATA[
+			//appending an empty string forces the JOB_NAME to be a string type, so the replace method does not fail because of ambiguity
+			var JOB_NAME = "" + project.getProperty("env.JOB_NAME");
+			project.setProperty("apexdoc.id", JOB_NAME.replace(/[^a-z]/gi, ""));
+		]]></script>
+
+		<property name="directory.apexdoc.base" value="${env.WORKSPACE}/apexdoc" />
+		<property name="directory.apexdoc.generated" value="${directory.apexdoc.base}/generated" />
+		<property name="directory.apexdoc.deploy" value="${directory.apexdoc.base}/deploy" />
+		<property name="apexdoc.common.filename" value="apexdoc_${apexdoc.id}" />
+
+		<!-- cleanup the directory so a fresh dir is used for the deploy -->
+		<delete dir="${directory.apexdoc.base}" />
+		<mkdir dir="${directory.apexdoc.deploy}" />
+	
+		<!-- Generate the Apex Docs -->
+		<exec executable="java">
+	  		<arg line="-jar /var/lib/jenkins/salesforce-build-tools/lib/SfApexDoc.jar" />
+			<arg line="-s '${env.WORKSPACE}/src/'" />	<!-- source folder -->
+			<arg line="-t '${directory.apexdoc.generated}'" />	<!-- target folder -->
+			<!--<arg line="-d" />-->	<!--debug output -->
+		</exec>
+		<zip destfile="${directory.apexdoc.deploy}/staticresources/${apexdoc.common.filename}.resource" basedir="${directory.apexdoc.generated}/SfApexDocs" />
+
+		<!-- create the matching apexdoc resource metadata xml file-->
+		<echo file="${directory.apexdoc.deploy}/staticresources/${apexdoc.common.filename}.resource-meta.xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+			<StaticResource xmlns="http://soap.sforce.com/2006/04/metadata">
+				<cacheControl>Private</cacheControl>
+				<contentType>application/zip</contentType>
+			</StaticResource>
+		]]></echo>
+
+		<!-- create the visualforce page for viewing the apexdoc -->
+		<echo file="${directory.apexdoc.deploy}/pages/${apexdoc.common.filename}.page"><![CDATA[
+			<apex:page action="{!URLFOR($Resource.${apexdoc.common.filename},'index.html')}" />
+		]]></echo>
+
+		<!-- create the matching visualforce page metadata xml file-->
+		<echo file="${directory.apexdoc.deploy}/pages/${apexdoc.common.filename}.page-meta.xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+			<ApexPage xmlns="http://soap.sforce.com/2006/04/metadata">
+				<apiVersion>${metadata.api.version}</apiVersion>
+				<label>JavaDocs - ${apexdoc.id}</label>
+			</ApexPage>
+		]]></echo>
+
+		<!-- create the package.xml file so the deployment can be done -->
+		<echo file="${directory.apexdoc.deploy}/package.xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+			<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+				<types>
+					<members>*</members>
+					<name>ApexPage</name>
+				</types>
+				<types>
+					<members>*</members>
+					<name>StaticResource</name>
+				</types>
+				<version>${metadata.api.version}</version>
+			</Package>
+		]]></echo>
+
+		<!-- These login credentials are stored in the root build.properties file -->
+		<sf:deploy username="${apexdoc.sf.username}" password="${apexdoc.sf.password}" serverurl="${apexdoc.sf.server}" deployRoot="${directory.apexdoc.deploy}" />
+
+	</target>
+
+</project>
