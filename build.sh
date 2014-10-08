@@ -2,8 +2,8 @@
 set -ev
 
 sfdeploy=".sfdeploy"
-undeploy="false"
-deploy="false"
+#undeploy="false"
+#deploy="false"
 runAllTests="true"
 #if[ -e "$sfdeploy" ]
 #then
@@ -39,7 +39,7 @@ runAllTests="true"
 #			fi
 #		fi
 #	fi
-
+ant deploy undeploy
 if [ "${undeploy}" = "true" ]; then
   ant undeploy
 fi
