@@ -4,7 +4,7 @@ set -ev
 sfdeploy=".sfdeploy"
 #undeploy="false"
 #deploy="false"
-if["${runAllTests}" != "false"]
+if["${runAllTests}" -ne "false"]
 then
 	export runAllTests="true"
 fi
