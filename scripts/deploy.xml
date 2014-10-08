@@ -34,7 +34,7 @@
 		serverurl="${env.sfserver}"
 		deployRoot="./src"
 		checkOnly="false"
-		runAllTests="false"
+		runAllTests="true"
 		logType="Debugonly"
 		maxPoll="2000" pollWaitMillis="5000"
 		allowMissingFiles="true"
