@@ -1,13 +1,13 @@
 #!/bin/bash
 set -ev
 
-sfdeploy=".sfdeploy"
+#sfdeploy=".sfdeploy"
 #undeploy="false"
 #deploy="false"
 #if[ -e "$sfdeploy" ]
 #then
-	chmod a+x .sfdeploy
-	./.sfdeploy
+#chmod a+x .sfdeploy
+#	./.sfdeploy
 #	if["${TRAVIS_PULL_REQUEST}" = "true"]
 #	then
 #		if["${sfbuildpulls}" == "true"]
