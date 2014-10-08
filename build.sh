@@ -4,7 +4,10 @@ set -ev
 sfdeploy=".sfdeploy"
 #undeploy="false"
 #deploy="false"
-runAllTests="true"
+if["${runAllTests}" != "false"]
+then
+	export runAllTests="true"
+fi
 #if[ -e "$sfdeploy" ]
 #then
 	chmod a+x .sfdeploy
