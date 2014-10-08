@@ -39,7 +39,6 @@ runAllTests="true"
 #			fi
 #		fi
 #	fi
-ant deploy undeploy
 if [ "${undeploy}" = "true" ]; then
   ant undeploy
 fi
