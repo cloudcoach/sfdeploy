@@ -6,3 +6,4 @@ fi
 if [ "${deploy}" = "true" ]; then
   ant deploy
 fi
+exit 0
